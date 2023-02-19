@@ -33,7 +33,7 @@
                     </div>
                     <!-- Masthead Subheading-->
                     <p class="masthead-subheading font-weight-light mb-0">
-        Program Pengenalan Lingkungan Persekolahan (PLP) tetap akan dilaksanakan dengan menyesuaikan kondisi saat ini. Mahasiswa yang telah memenuhi syarat diharapkan segera melakukan pemilihan sekolah untuk mengikuti program kegiatan ini, dengan klik buton Zonasi Sekolah pada tab Menu di bawah.
+        Program Pengenalan Lingkungan Persekolahan (PLP) tetap akan dilaksanakan dengan menyesuaikan kondisi saat ini. Mahasiswa yang telah memenuhi syarat diharapkan segera melakukan pemilihan sekolah untuk mengikuti program kegiatan ini, dengan klik Buton Pemilihan Penempatan Sekolah pada Menu di bawah.
         </p>
             </div>
         </header>
