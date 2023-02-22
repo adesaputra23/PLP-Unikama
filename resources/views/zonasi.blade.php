@@ -99,7 +99,7 @@
                         if (mhs.tgl_pembayaran == null) {
                             $('#form-show').css('display', 'none');
                             $('#text-info').css('display', 'block');
-                            $('#text-info').text('Silahkan upload bukti pembayran jika sudah membayar');
+                            $('#text-info').text('Silahkan upload bukti pembayaran jika sudah melakukan pembayaran');
                         }else{
                             $('#text-info').css('display', 'none');
                             $('#form-show').css('display', 'block');
