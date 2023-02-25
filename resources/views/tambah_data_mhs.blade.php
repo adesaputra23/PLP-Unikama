@@ -177,7 +177,7 @@
                             <button id="add" type="submit" class="btn btn-success">Simpan</button>
                         </div>
                         <div>
-                            <button id="res" type="button" class="btn btn-default">Batal</button>
+                            <button id="res" type="reset" class="btn btn-danger">Batal</button>
                         </div>
                     </div>
                 </form>
