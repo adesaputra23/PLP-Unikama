@@ -54,24 +54,6 @@
                         </div>
                     </div>
 
-
-                    {{-- program studi --}}
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 col-form-label">Program Studi*</label>
-                        <div class="col-sm-10">
-                            <select class="custom-select" name="prodi" id="prodi" required
-                                oninvalid="this.setCustomValidity('Program Studi Tidak Boleh Kosong')"
-                                oninput="this.setCustomValidity('')" />
-                            <option value="" selected disabled>Pilih Program Studi</option>
-                            @foreach ($list_prodi as $prodi_key => $prodi)
-                                <option value="{{ $prodi_key }}"
-                                    {{ $prodi_key == $get_mhs->program_studi ? 'selected' : '' }}>
-                                    {{ $prodi }}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                    </div>
-
                     {{-- fakultas --}}
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-2 col-form-label">Fakultas*</label>
@@ -85,6 +67,18 @@
                                     {{ $fakultas_key == $get_mhs->fakultas ? 'selected' : '' }}>
                                     {{ $fakultas }}</option>
                             @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    {{-- program studi --}}
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Program Studi*</label>
+                        <div class="col-sm-10">
+                            <select class="custom-select" name="prodi" id="prodi" required
+                                oninvalid="this.setCustomValidity('Program Studi Tidak Boleh Kosong')"
+                                oninput="this.setCustomValidity('')" />
+                            <option value="" selected disabled>Pilih Program Studi</option>
                             </select>
                         </div>
                     </div>
@@ -191,5 +185,32 @@
         </div>
     </section>
     {{-- end section conten --}}
+
+    <script>
+        $(document).ready(function(e){
+            var fakultas = "{{$get_mhs->fakultas}}";
+            var prodi = "{{$get_mhs->program_studi}}";
+            GetProdi(fakultas, prodi);
+
+            $(document).on('change', '#fakultas', function(e){
+                var id_fakultas = $(this).val();
+                GetProdi(id_fakultas);
+            });
+
+            function GetProdi(id_fakultas, prodi = null){
+                console.log(prodi);
+                var list_data = $.get("{{url('prodi/ajax-get')}}/" + id_fakultas);
+                var html_prodi = '';
+                list_data.done(function(data){
+                    $('#prodi').empty();
+                    html_prodi += '<option value="" selected disabled>Pilih Program Studi</option>';
+                    $.each(data, function (index, value) { 
+                        html_prodi += `<option value="${value.id}" ${prodi == value.id ? 'selected' : ''} >${value.nama}</option>`;
+                    });
+                    $('#prodi').append(html_prodi);
+                })
+            }
+        })
+    </script>
 
 @endsection

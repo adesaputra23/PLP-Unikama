@@ -19,12 +19,14 @@ class UserRole extends Model
     const DPL             = 2;
     const KEPALA_SEKOLAH  = 3;
     const GURU_PAMONG     = 4;
+    const MAHASISWA       = 5;
 
     const MAP_ROLE = [
         1 => 'Admin',
         2 => 'DPL',
         3 => 'Kepala Sekolah',
         4 => 'Guru Pamong',
+        5 => 'Mahasiswa'
     ];
 
 }

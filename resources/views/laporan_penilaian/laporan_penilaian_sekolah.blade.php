@@ -230,7 +230,6 @@
     {{-- end section conten --}}
 
     {{-- Modal --}}
-
     <div class="modal fade" id="not-detail">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -12,8 +12,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
-                            href="{{ url('/') }}">Home</a></li>
+                    {{-- <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
+                            href="{{ url('/') }}">Home</a></li> --}}
                     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
                             href="{{ route('login') }}">Login</a></li>
                 </ul>
@@ -53,19 +53,6 @@
                                 oninput="this.setCustomValidity('')">
                         </div>
 
-                        {{-- program studi --}}
-                        <div class="mb-2">
-                            <label for="exampleFormControlInput1" class="form-label">Program Studi</label>
-                            <select class="form-control" name="prodi" id="prodi" required
-                                oninvalid="this.setCustomValidity('Program Studi Tidak Boleh Kosong')"
-                                oninput="this.setCustomValidity('')" />
-                                <option value="" selected disabled>Pilih Program Studi</option>
-                                @foreach ($list_prodi as $prodi_key => $prodi)
-                                    <option value="{{ $prodi_key }}">{{ $prodi }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
                         {{-- fakultas --}}
                         <div class="mb-3">
                             <label for="inputEmail3" class="col-form-label">Fakultas</label>
@@ -76,6 +63,16 @@
                                 @foreach ($list_fakultas as $fakultas_key => $fakultas)
                                     <option value="{{ $fakultas_key }}">{{ $fakultas }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+
+                        {{-- program studi --}}
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Program Studi</label>
+                            <select class="form-control" name="prodi" id="prodi" required
+                                oninvalid="this.setCustomValidity('Program Studi Tidak Boleh Kosong')"
+                                oninput="this.setCustomValidity('')" />
+                                <option value="" selected disabled>Pilih Program Studi</option>
                             </select>
                         </div>
 
@@ -158,4 +155,19 @@
     </section>
 
     @include('sweetalert::alert')
+    <script>
+        $(document).on('change', '#fakultas', function(e){
+            var id_fakultas = $(this).val();
+            var list_data = $.get("{{url('prodi/ajax-get')}}/" + id_fakultas);
+            var html_prodi = '';
+            list_data.done(function(data){
+                $('#prodi').empty();
+                html_prodi += '<option value="" selected disabled>Pilih Program Studi</option>';
+                $.each(data, function (index, value) { 
+                    html_prodi += `<option value="${value.id}">${value.nama}</option>`;
+                });
+                $('#prodi').append(html_prodi);
+            })
+        })
+    </script>
 @endsection

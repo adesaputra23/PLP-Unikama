@@ -55,6 +55,7 @@
                                         <th>NIK Kepala Sekolah</th>
                                         <th>Nama Kepala Sekolah</th>
                                         <th>Jenis PLP</th>
+                                        <th>Tahun Ajaran</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -78,6 +79,9 @@
                                                         {{ 'PLP II' }}
                                                     @endif
                                                 @endif
+                                            </td>
+                                            <td>
+                                                {{$sekolah->JointoTahunAjaran == null ? '-' : $sekolah->JointoTahunAjaran->name}}
                                             </td>
                                             <td>
                                                 <div class="btn-group">

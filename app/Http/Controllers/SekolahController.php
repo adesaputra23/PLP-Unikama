@@ -10,6 +10,7 @@ use App\KepalaSekolah;
 use App\Mahasiswa;
 use App\Penilaian;
 use App\PenilaianDPl;
+use App\TahunAjaran;
 use App\User;
 use App\UserRole;
 use App\ZonasiSekolah;
@@ -120,10 +121,12 @@ class SekolahController extends Controller
     public function FormEditDataSekolah($id_sekolah)
     {
         $get_data_sekolah = MitraSekolah::where('id_sekolah', $id_sekolah)->first();
+        $list_tahun_ajaran = TahunAjaran::all();
         return view(
             'edit_data_sekolah',
                 compact(
                     'get_data_sekolah',
+                    'list_tahun_ajaran'
                 )
         );
     }
@@ -157,6 +160,7 @@ class SekolahController extends Controller
                 $sekolah->jml_mhs_plp_2 = null;
             }
             $sekolah->status_kepsek = 1;
+            $sekolah->id_tahun_ajaran = $request->id_tahun_ajaran;
             $sekolah->update();
 
             $get_id_kepsek = KepalaSekolah::where('kode_sekolah', $request->kode_sekolah)->first();
@@ -305,9 +309,23 @@ class SekolahController extends Controller
         return view('zonasi');
     }
 
+    public function ZonasiMahasiswa()
+    {
+        $user = Auth::user()->get_mahasiswa;
+        return view('mahasiswa.zonasi', compact('user'));
+    }
+
     public function Pengumuman()
     {
         return view('pengumuman');
+    }
+
+    public function PengumumanMahasiswa()
+    {
+        $user = Auth::user()->get_mahasiswa;
+        $prodi = User::MAP_PRODI;
+        $fakultas = User::MAP_FAKULTAS;
+        return view('mahasiswa.pengumuman', compact('user', 'prodi', 'fakultas'));
     }
 
     public function PengumumanCari(Request $request)
@@ -341,7 +359,8 @@ class SekolahController extends Controller
     {
         $npm = $request->npm;
         $mhs = Mahasiswa::where('npm', $npm)->first();
-        $get_plp = MitraSekolah::where('status_kepsek', 1);
+        $tahun_ajaran = TahunAjaran::AktifTahunAjaran();
+        $get_plp = MitraSekolah::where('status_kepsek', 1)->where('id_tahun_ajaran', $tahun_ajaran->id_tahun_ajran);
         $data = [];
         if (empty($mhs)) {
             return response()->json($data);
@@ -367,14 +386,19 @@ class SekolahController extends Controller
     public function ProsesAddZonasi(Request $request)
     {
         $missage = [
-            'npm.unique' => 'Sudah memilih sekolah',
+            'npm.unique' => 'Berhasil Ubah Sekolah',
         ];
         $validator = Validator::make($request->all(), [
             'npm' => 'unique:zonasi_sekolah',
         ],$missage);
         
         if ($validator->fails()) {
-            return back()->with('toast_error', $validator->messages()->all()[0])->withInput();
+            $aray_data = [
+                'kode_sekolah' => $request->kode_sekolah,
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
+            $insert_data = ZonasiSekolah::where('npm', $request->npm)->update($aray_data);
+            return back()->with('toast_success', $validator->messages()->all()[0])->withInput();
         }
 
         $jenis_plp = ($request->jenis_plp == 'PLP I') ? 1 : 2;
@@ -383,12 +407,12 @@ class SekolahController extends Controller
             ->first();
 
         if (empty($get_mhs)) {
-            return redirect('zonasi-sekolah')->with('toast_error', 'Belum daftar');
+            return redirect('zonasi-sekolah-mahasiswa')->with('toast_error', 'Belum daftar');
         }else{
             if ($get_mhs->tgl_pembayaran == null) {
-                return redirect('zonasi-sekolah')->with('toast_error', 'Belum upload bukti pembayaran');
+                return redirect('zonasi-sekolah-mahasiswa')->with('toast_error', 'Belum upload bukti pembayaran');
             }elseif ($get_mhs->tgl_verifikasi == null) {
-                return redirect('zonasi-sekolah')->with('toast_error', 'Belum diverifikasi oleh admin');
+                return redirect('zonasi-sekolah-mahasiswa')->with('toast_error', 'Belum diverifikasi oleh admin');
             }
         }
 
@@ -426,7 +450,7 @@ class SekolahController extends Controller
             $insert_penilaian_dpl->created_at = date('Y-m-d H:i:s');
             $insert_penilaian_dpl->save();
 
-            return redirect('zonasi-sekolah')->with('toast_success', 'Data berhasil disimpan');
+            return redirect('zonasi-sekolah-mahasiswa')->with('toast_success', 'Data berhasil disimpan');
         }
     }
 

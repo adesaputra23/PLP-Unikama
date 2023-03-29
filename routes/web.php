@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('tampilan_awal');
+    return view('login');
 });
 // Auth::routes();
 
@@ -62,15 +62,25 @@ Route::get('/pendaftaran-plp/pdf/{id}/{status}', 'PendaftaranController@Pdf')->n
 Route::get('/upload-bukti-pembayaran', 'PendaftaranController@UploadBuktiPembayaran')->name('upload-bukti-pembayaran');
 Route::post('/upload-bukti-pembayaran-save', 'PendaftaranController@UploadBuktiPembayaranSave')->name('upload-bukti-pembayaran.save');
 
+// mahasiswa upload bukti pembayaran
+Route::get('mahasiswa/upload-bukti-pembayaran', 'PendaftaranController@UploadBuktiPembayaranMhs')->name('upload-bukti-pembayaran-mahasiswa');
+
 // zonasi sekolah
 Route::get('/data-zonasi', 'ZonasiController@DataZonasi')->name('data.zonasi');
 Route::get('/zonasi-sekolah', 'SekolahController@Zonasi')->name('zonasi');
 Route::post('/proses-add-zonasi', 'SekolahController@ProsesAddZonasi')->name('proses.add.zonasi');
 
+// mahasiswa zonasi
+Route::get('/zonasi-sekolah-mahasiswa', 'SekolahController@ZonasiMahasiswa')->name('zonasi.mahasiswa');
+
 // pengumuman
 Route::get('/pengumuman', 'SekolahController@Pengumuman')->name('pengumuman');
 Route::post('/ajax/pengumuman', 'SekolahController@PengumumanCari');
-Route::get('/pengumuman_pdf/{id}', 'SekolahController@PengumumanPdf');
+Route::get('/pengumuman_pdf/{id}', 'SekolahController@PengumumanPdf')->name('PengumumanPdf');
+
+// mahasiswa pengumuman
+Route::get('/pengumuman-mahasiswa', 'SekolahController@PengumumanMahasiswa')->name('pengumuman.mahasiswa');
+
 
 // user role
 Route::get('/ajax/prodi', 'UserController@Prodi');
@@ -168,12 +178,14 @@ Route::get('laporan-penilaian-sekolah', 'LaporanPenilaian@LaporanPenilaianSekola
 // laporan penilaian Dpl
 Route::get('laporan-penilaian-dpl', 'LaporanPenilaian@LaporanPenilaianDpl')->name('laporan.penilaian.dpl');
 
+// Mahasiswa Laporan penilaian
+Route::get('laporan-penilaian-mahasiswa', 'LaporanPenilaian@LaporanPenilaianMahasiswa')->name('laporan.penilaian.mahasiswa');
+
 // rekap nilai
 Route::get('rekap-nilai', 'LaporanPenilaian@RekapNilai')->name('rekap.nilai');
 
 // cetak pdf rekap nilai
 Route::get('rekap-nilai/pdf/{jenis_plp}', 'LaporanPenilaian@CetakRekapNilai')->name('rekap.nilai.pdf');
-
 
 // Indikator Penilaian Kepala Sekolah
 Route::get('indikator-sekolah', 'PenilaianController@IndikatorPenilaianSekolah')->name('indikator.sekolah');
@@ -185,14 +197,21 @@ Route::get('indikator-dpl', 'PenilaianController@IndikatorPenilaianDpl')->name('
 Route::post('simpan-indikator-dpl', 'PenilaianController@SimpanIndikatorDpl')->name('simpan.indikator.dpl');
 Route::post('hapus-indikator-n1-p1', 'PenilaianController@HapusIndikatorDpl');
 
-
 //Admin User role 
 Route::get('/user-role', 'UserController@UserRole')->name('user.role');
 Route::post('/hapus-user', 'UserController@HapusUser')->name('hapus.user');
 
+// tahun ajaran
+Route::get('/tahun-ajaran', 'TahunAjranController@index')->name('tahun.ajaran');
+Route::post('/tahun-ajaran/save', 'TahunAjranController@Save')->name('tahun.ajaran.save');
+Route::post('/tahun-ajaran/hapus', 'TahunAjranController@Hapus')->name('tahun.ajaran.hapus');
+
 // ajax
 Route::get('ajax/get-indikator', 'PenilaianController@GetIndikaatorAjax');
 Route::get('ajax/indikator-dpl', 'PenilaianController@GetIndikaatorAjaxDpl');
+
+// ajax prodi get
+Route::get('prodi/ajax-get/{id_fakultas}', 'Controller@GetProdi');
 
 // sertifikat
 Route::get('sertifikat/index', 'SertifikatController@index')->name('sertifikat');
@@ -201,6 +220,11 @@ Route::get('sertifikat/mhs/{npm}', 'SertifikatController@SertifikatMhs')->name('
 Route::get('sertifikat/dpl/{nik}', 'SertifikatController@SertifikatDPL')->name('sertifikat.dpl');
 Route::get('sertifikat/guru_pamong/{nik}', 'SertifikatController@SertifikatGP')->name('sertifikat.guru_pamong');
 Route::get('sertifikat/kepala_sekolah/{nik}', 'SertifikatController@SertifikatKP')->name('sertifikat.kepala_sekolah');
+
+// tampilan awal
+Route::get('/tampilan_awal', function () {
+    return view('tampilan_awal');
+});
 
 
 

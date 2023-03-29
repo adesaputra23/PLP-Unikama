@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Dpl;
 use App\GuruPamong;
 use App\KepalaSekolah;
+use App\Mahasiswa;
 use App\MitraSekolah;
 use Illuminate\Http\Request;
 use App\User;
@@ -28,6 +29,7 @@ class UserController extends Controller
             2 => 'DPL',
             3 => 'KEPALA SEKOLAH',
             4 => 'GURU PAMONG',
+            5 => 'MAHASISWA'
         ];
         $list_user = User::with('user_role','get_pegawai','get_dpl','get_kepala_sekolah','get_guru_pamong')
             ->get();
@@ -65,8 +67,6 @@ class UserController extends Controller
 
     public function HapusUser(Request $request)
     {
-        // dd($request->all());
-
         $nik_dpl = $request->nik_dpl;
         if ($nik_dpl != null) {
             $user = User::where('nik', $nik_dpl);
@@ -99,6 +99,18 @@ class UserController extends Controller
             $sekolah = MitraSekolah::where('kode_sekolah', $kode_sekolah->kode_sekolah);
             $role = UserRole::where('nik', $nik_gp);
             if ($user->delete() && $kepsek->delete() && $sekolah->delete() && $role->delete()) {
+                return redirect('user-role')->with('toast_success', 'Berhasil hapus user');
+            } else {
+                return redirect('user-role')->with('toast_error', 'Gagal hapus user');
+            }
+        }
+
+        $nik_mhs = $request->nik_mhs;
+        if ($nik_mhs != null) {
+            $user = User::where('nik', $nik_mhs);
+            $mahasiswa = Mahasiswa::where('npm', $nik_mhs);
+            $role = UserRole::where('nik', $nik_mhs);
+            if ($user->delete() && $role->delete() && $mahasiswa->delete()) {
                 return redirect('user-role')->with('toast_success', 'Berhasil hapus user');
             } else {
                 return redirect('user-role')->with('toast_error', 'Gagal hapus user');

@@ -76,7 +76,6 @@
                                         </div>
                                     </div>
 
-
                                     {{-- status plp --}}
                                     <div class="form-group row">
                                         <label for="inputEmail3" class="col-sm-4 col-form-label">Jenis PLP</label>
@@ -144,8 +143,22 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     @endif
+
+                                    {{-- Kode Sekolah --}}
+                                    <div class="form-group row">
+                                        <label for="inputEmail3" class="col-sm-4 col-form-label">Tahun Ajaran*</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" name="id_tahun_ajaran" id="id_tahun_ajaran">
+                                                <option value="" selected disabled>Pilih Tahun Ajaran</option>
+                                                @foreach ($list_tahun_ajaran as $item => $value)
+                                                    <option value="{{$value->id_tahun_ajran}}" {{$value->id_tahun_ajran == $get_data_sekolah->id_tahun_ajaran ? 'selected' : ''}}>
+                                                        {{$value->name}}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>

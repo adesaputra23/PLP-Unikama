@@ -222,14 +222,13 @@
                                                     @endif
                                                 </th>
                                                 <th class="text-center">
-                                                    @if ($gp == 0 && $kpsk == 0 && $dpl == 0)
+                                                    @php
+                                                        $nilai_total = ($gp + ($kpsk * 3) + $dpl)/5;
+                                                    @endphp
+                                                    @if ($nilai_total == 0)
                                                         {{'-'}}
                                                     @else
-                                                        {{-- rumus = $mhs_plp_2->JointoPenilaianDpl->jumlah_na =(F390+(3*E390)+G390)/5 --}}
-                                                        @php
-                                                            $nilai_total = ($gp + ($kpsk * 3) + $dpl)/5;
-                                                        @endphp
-                                                        {{$nilai_total}}
+                                                        {{$nilai_total}}   
                                                     @endif
                                                 </th>
                                                 <th class="text-center">

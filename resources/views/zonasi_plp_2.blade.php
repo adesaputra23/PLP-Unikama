@@ -69,18 +69,21 @@ use App\GuruPamong;
                                         $get_id_kepsek = $zonasi_plp_2->JointoMitraSekolah->JointoKepsek->id_kepsek;
                                         $list_guru_pamong = GuruPamong::where('id_kepsek', $get_id_kepsek)->get();
                                     @endphp
-                                    {{-- select guru pamong --}}
-                                    <div class="form-group">
-                                        <select class="custom-select" name="guru_pamong_plp_2" id="guru_pamong_plp_2"
-                                            data-npm_plp_2="{{ $zonasi_plp_2->npm }}" />
-                                        <option value="" selected disabled>Pilih Guru Pamong</option>
-                                        @foreach ($list_guru_pamong as $key_gp => $guru_pamong)
-                                            <option value="{{ $guru_pamong->id_guru_pamong }}">
-                                                {{ $guru_pamong->nik . ' - ' . $guru_pamong->nama_guru_pamong }}
-                                            </option>
-                                        @endforeach
-                                        </select>
-                                    </div>
+                                    @if ($role === 1)
+                                        {{'-'}}
+                                    @else
+                                        <div class="form-group">
+                                            <select class="custom-select" name="guru_pamong_plp_2" id="guru_pamong_plp_2"
+                                                data-npm_plp_2="{{ $zonasi_plp_2->npm }}" />
+                                            <option value="" selected disabled>Pilih Guru Pamong</option>
+                                            @foreach ($list_guru_pamong as $key_gp => $guru_pamong)
+                                                <option value="{{ $guru_pamong->id_guru_pamong }}">
+                                                    {{ $guru_pamong->nik . ' - ' . $guru_pamong->nama_guru_pamong }}
+                                                </option>
+                                            @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
                                 @else
                                     {{ $zonasi_plp_2->JointoGuruPamong->nama_guru_pamong }}
                                 @endif

@@ -30,5 +30,8 @@
     @if (Auth::user()->user_role->role === 4)
         @include('dashbooard/dashbord_guru_pamong')
     @endif
+    @if (Auth::user()->user_role->role === 5)
+        @include('dashbooard/dashbord_mahasiswa')
+    @endif
     {{-- end section conten --}}
 @endsection

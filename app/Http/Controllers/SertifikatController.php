@@ -121,9 +121,12 @@ class SertifikatController extends Controller
     public function SertifikatMhs($npm = null)
     {
         if ($npm == null) {
-            return redirect('sertifikat/index')->with('toast_error', 'Error : Gagal Menampilkan Data Sertifikat');
+            return redirect('sertifikat/sertifikat_mhs')->with('toast_error', 'Error : Gagal Menampilkan Data Sertifikat');
         }
         $mhs = Mahasiswa::where('npm', $npm)->first();
+        if (empty($mhs->JointoZonasi->JointoMitraSekolah)) {
+            return redirect()->back()->with('toast_error', 'Sertifikat belum bisa di download');
+        }
         $no_sertifikat = Sertifikat::where('id_sertifikat', 3)->first();
         $no_str = strlen($no_sertifikat->no_srt);
         if ($no_str == 1) {
@@ -211,7 +214,7 @@ class SertifikatController extends Controller
             $no_str = $no_sertifikat->no_srt;
         }
         $fix_no_sertifikat = $no_str.'/DP2KI/A2.3/UK-ML/XII.'.$no_sertifikat->tahun;
-        $title = 'Sertifikat Guru Pamong';
+        $title = 'Sertifikat Kepala Sekolah';
         $pdf = PDF::loadview('sertifikat/sertifikat_kepala_sekolah', compact('title', 'kp', 'fix_no_sertifikat', 'jumlah_mahasiswa'))->setPaper('A4','landscape');
         return $pdf->stream();
     }

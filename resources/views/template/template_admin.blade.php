@@ -47,21 +47,22 @@
     $dpl = Auth::user()->get_dpl;
     $kepala_sekolah = Auth::user()->get_kepala_sekolah;
     $guru_pamong = Auth::user()->get_guru_pamong;
+    $mahasiswa = Auth::user()->get_mahasiswa;
     $nama_user = '';
-    
-    if (empty($pegawai->nama_peg)) {
-        if (empty($dpl->nama_dpl)) {
-            if (empty($kepala_sekolah->nama_kepsek)) {
-                $nama_user = $guru_pamong->nama_guru_pamong;
-            } else {
-                $nama_user = $kepala_sekolah->nama_kepsek;
-            }
-        } else {
-            $nama_user = $dpl->nama_dpl;
-        }
-    } else {
+
+    if ($pegawai) {
         $nama_user = $pegawai->nama_peg;
+    }elseif ($dpl) {
+        $nama_user = $dpl->nama_dpl;
+    }elseif ($kepala_sekolah) {
+        $nama_user = $kepala_sekolah->nama_kepsek;
+    }elseif ($guru_pamong) {
+        $nama_user = $guru_pamong->nama_guru_pamong;
+    }else {
+        $nama_user = $mahasiswa->nama_mhs;
     }
+    
+    // dd($nama_user);
     
     if ($role === 1) {
         $role = 'ADMIN';
@@ -69,8 +70,10 @@
         $role = 'DPL';
     } elseif ($role === 3) {
         $role = 'KEPALA SEKOLAH';
-    } else {
+    } elseif ($role === 4) {
         $role = 'GURU PAMONG';
+    }else{
+        $role = 'MAHASISWA';
     }
 @endphp
 
@@ -193,6 +196,14 @@
                                     </p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{route('tahun.ajaran')}}" class="nav-link">
+                                    <i class='nav-icon fas fa-calendar-day'></i>
+                                    <p>
+                                        Tahun Ajaran
+                                    </p>
+                                </a>
+                            </li>
 
                             <li class="nav-header">LAPORAN PENILAIAN</li>
                             <li class="nav-item">
@@ -275,6 +286,14 @@
                                     </p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{route('sertifikat.dpl', Auth::user()->nik)}}" target="_BLANK" class="nav-link">
+                                    <i class='nav-icon fas fa-vote-yea'></i>
+                                    <p>
+                                        Download Sertifikat
+                                    </p>
+                                </a>
+                            </li>
                         @endif
 
                         @if ($role == 'KEPALA SEKOLAH')
@@ -310,6 +329,14 @@
                                     </p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{route('sertifikat.kepala_sekolah', Auth::user()->nik)}}" target="_BLANK" class="nav-link">
+                                    <i class='nav-icon fas fa-vote-yea'></i>
+                                    <p>
+                                        Download Sertifikat
+                                    </p>
+                                </a>
+                            </li>
                         @endif
 
                         @if ($role == 'GURU PAMONG')
@@ -326,6 +353,57 @@
                                     <i class="nav-icon fas fa-list-ol"></i>
                                     <p>
                                         Penilaian
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('sertifikat.guru_pamong', Auth::user()->nik)}}" target="_BLANK" class="nav-link">
+                                    <i class='nav-icon fas fa-vote-yea'></i>
+                                    <p>
+                                        Download Sertifikat
+                                    </p>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if ($role == 'MAHASISWA')
+                            <li class="nav-item">
+                                <a href="{{ route('upload-bukti-pembayaran-mahasiswa') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-cloud-upload-alt"></i>
+                                    <p>
+                                        Upload Bukti Pembayaran
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('zonasi.mahasiswa') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-school"></i>
+                                    <p>
+                                        Pemilihan Sekolah
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('pengumuman.mahasiswa')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-info-circle"></i>
+                                    <p>
+                                        Pengumuman
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('laporan.penilaian.mahasiswa')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-poll-h"></i>
+                                    <p>
+                                        Nilai PLP
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('sertifikat.mhs', Auth::user()->nik)}}" target="_BLANK" class="nav-link">
+                                    <i class='nav-icon fas fa-vote-yea'></i>
+                                    <p>
+                                        Download Sertifikat
                                     </p>
                                 </a>
                             </li>

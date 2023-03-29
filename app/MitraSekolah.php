@@ -35,4 +35,9 @@ class MitraSekolah extends Model
     {
         return $this->hasOne('App\ZonasiSekolah', 'kode_sekolah', 'kode_sekolah');
     }
+
+    public function JointoTahunAjaran()
+    {
+        return $this->hasOne('App\TahunAjaran', 'id_tahun_ajran', 'id_tahun_ajaran');
+    }
 }

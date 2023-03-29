@@ -38,16 +38,34 @@ class User extends Authenticatable
     ];
 
     const MAP_PRODI = [
-        1   => 'BIMBINGAN & KONSELING',
-        2   => 'BAHASA & SASTRA INDONESIA',
-        3   => 'EKONOMI',
-        4   => 'BAHASA INGGRIS',
-        5   => 'FISIKA',
-        6   => 'GEOGRAFI',
-        7   => 'GURU PAUD',
-        8   => 'MATEMATIKA',
-        9   => 'PGSD',
-        10  => 'PPKN',
+         // BAHASA & SASTRA
+         1   => 'BAHASA & SASTRA INDONESIA',
+         2   => 'SASTRA INGGRIS',
+         3   => 'PENDIDIKAN BAHASA INGGRIS',
+         
+         // EKONOMI & BISNIS
+         4   => 'AKUNTANSI',
+         5   => 'MANAJEMEN',
+         6   => 'PENDIDIKAN EKONOMI',
+         
+         // ILMU PENDIDIKAN
+         7   => 'BIMBINGAN & KONSELING',
+         8   => 'PPKN',
+         9   => 'PENDIDIKAN GEOGRAFI',
+         10  => 'PENDIDIKAN GURU SEKOLAH DASAR',
+         11  => 'PENDIDIKAN ANAK USIA DINI',
+ 
+         // SAINS & TEKNOLOGI
+         12  => 'TEKNIK INFORMATIKA',
+         13  => 'SISTEM INFORMASI',
+         14  => 'PENDIDIKAN MATEMATIKA',
+         15  => 'PENDIDIKAN FISIKA & IPA',
+ 
+         // HUKUM
+         16  => 'HUKUM',
+ 
+         // PETERNAKAN
+         17  => 'PETERNAKAN',
     ];
 
     const MAP_FAKULTAS = [
@@ -55,6 +73,8 @@ class User extends Authenticatable
         2 => 'EKONOMI & BISNIS',
         3 => 'ILMU PENDIDIKAN',
         4 => 'SAINS & TEKNOLOGI',
+        5 => 'HUKUM',
+        6 => 'PETERNAKAN'
     ];
 
     const ROLE_FAKULTAS = [
@@ -100,6 +120,11 @@ class User extends Authenticatable
     public function get_guru_pamong()
     {
         return $this->hasOne('App\GuruPamong', 'nik', 'nik');
+    }
+
+    public function get_mahasiswa()
+    {
+        return $this->hasOne('App\Mahasiswa', 'npm', 'nik');
     }
 
 

@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Mahasiswa;
 use App\User;
+use App\UserRole;
 use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class PendaftaranController extends Controller
 {
     public function index(){
-        $list_prodi = User::MAP_PRODI;
-        $list_fakultas = User::MAP_FAKULTAS;
-        return view('pendaftaran', compact('list_prodi', 'list_fakultas'));
+        $list_fakultas = Mahasiswa::MAP_FAKULTAS;
+        return view('pendaftaran', compact('list_fakultas'));
     }
 
     public function Pendaftaran(Request $request)
@@ -43,7 +45,19 @@ class PendaftaranController extends Controller
                     }elseif ($newSiswa->jenis_plp == 2 && $newSiswa->ipk < 2.80) {
                         return redirect()->route('pendaftaran-plp')->with('toast_error', 'Gagal, IPK anda kurang');
                     }
-                    $newSiswa->save();
+                    if ($newSiswa->save()) {
+                        $user = new User();
+                        $user->nik          = $newSiswa->npm;
+                        $user->password     = Hash::make($newSiswa->npm);
+                        $user->created_at   = date('Y-m-d H:i:s');
+                        $user->updated_at   = date('Y-m-d H:i:s');
+                        $user->save();
+            
+                        $role       = new UserRole();
+                        $role->nik  = $newSiswa->npm;
+                        $role->role = 5;
+                        $role->save();
+                    }
                     $status = 0;
                     return redirect()->route('show', ['id' => $newSiswa->id_mhs, 'status' => $status])->with('toast_success', 'Berhasil daftar');
                 }
@@ -77,11 +91,17 @@ class PendaftaranController extends Controller
         return view('upload_bukti_pembayaran');
     }
 
+    public function UploadBuktiPembayaranMhs()
+    {
+        $user = Auth::user()->get_mahasiswa;
+        return view('mahasiswa.upload_bukti_pembayaran', compact('user'));
+    }
+
     public function UploadBuktiPembayaranSave(Request $request)
     {
         $mhs = Mahasiswa::where('npm', $request->npm)->first();
         if (empty($mhs)) {
-            return redirect()->route('upload-bukti-pembayaran', ['npm' => $request->npm])->with('toast_error', 'Anda belum melakukan pendaftaran');
+            return redirect()->route('upload-bukti-pembayaran-mahasiswa', ['npm' => $request->npm])->with('toast_error', 'Anda belum melakukan pendaftaran');
         }
         $missage = [
             'bukti_bayar.mimes' => 'File bukan jpeg,png,jpg',
@@ -92,7 +112,7 @@ class PendaftaranController extends Controller
         ], $missage);
 
         if ($validator->fails()) {
-            return redirect()->route('upload-bukti-pembayaran', ['npm' => $request->npm])->with('toast_error', $validator->messages()->all()[0])->withInput();
+            return redirect()->route('upload-bukti-pembayaran-mahasiswa', ['npm' => $request->npm])->with('toast_error', $validator->messages()->all()[0])->withInput();
         }
 
         $file = $request->file('bukti_bayar');
@@ -106,7 +126,7 @@ class PendaftaranController extends Controller
             'created_at'       => date('Y-m-d H:i:s'),
         ];
         Mahasiswa::where('npm', $request->npm)->update($array_data);
-        return redirect()->route('upload-bukti-pembayaran')->with('toast_success', 'Berhasil upload bukti pembayaran');
+        return redirect()->route('upload-bukti-pembayaran-mahasiswa')->with('toast_success', 'Berhasil upload bukti pembayaran');
     }
 
 }

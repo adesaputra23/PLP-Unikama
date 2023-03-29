@@ -56,6 +56,7 @@
                                     {{ $user->get_dpl != null ? $user->get_dpl->nama_dpl : '' }}
                                     {{ $user->get_kepala_sekolah != null ? $user->get_kepala_sekolah->nama_kepsek : '' }}
                                     {{ $user->get_guru_pamong != null ? $user->get_guru_pamong->nama_guru_pamong : '' }}
+                                    {{ $user->get_mahasiswa != null ? $user->get_mahasiswa->nama_mhs : '' }}
 
                                 </td>
                                 <td><span class="badge bg-info">{{ $list_role[$user->user_role->role] }}</span></td>
@@ -91,6 +92,15 @@
                                                         class="btn btn-danger btn-sm">Hapus</button>
                                                 @else
                                                     <button type="button" data-toggle="modal" data-target="#tidak-hapus-gp"
+                                                        class="btn btn-danger btn-sm">Hapus</button>
+                                                @endif
+                                            @elseif ($user->user_role->role == 5)
+                                                @if (empty($user->get_mahasiswa->JointoZonasi))
+                                                    <button type="button" data-toggle="modal" data-target="#hapus-mhs"
+                                                        id="btn-hapus-mhs" data-nik_mhs="{{ $user->nik }}"
+                                                        class="btn btn-danger btn-sm">Hapus</button>
+                                                @else
+                                                    <button type="button" data-toggle="modal" data-target="#tidak-hapus-mhs"
                                                         class="btn btn-danger btn-sm">Hapus</button>
                                                 @endif
                                             @endif
@@ -286,6 +296,58 @@
     </div>
     <!-- /.modal -->
 
+    {{-- modal pop up --}}
+    <div class="modal fade" id="hapus-mhs">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Hapus User</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('hapus.user') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="nik_mhs" id="nik_mhs">
+                        <p class="text-center">Anda yakin ingin menghapus data ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Hapus</button>
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Keluar</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    
+    {{-- modal pop up --}}
+    <div class="modal fade" id="tidak-hapus-mhs">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Hapus User</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Role user ini terkait dengan data zonasi, tidak bisa di hapus.</p>
+                </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> --}}
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Keluar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
 
     <script>
         $("#example1").DataTable({
@@ -320,6 +382,11 @@
         $(document).on('click', '#btn-hapus-dpl', function() {
             var nik_dpl = $(this).data('nik_dpl');
             $('#nik_dpl').val(nik_dpl);
+        })
+
+        $(document).on('click', '#btn-hapus-mhs', function() {
+            var nik_mhs = $(this).data('nik_mhs');
+            $('#nik_mhs').val(nik_mhs);
         })
     </script>
 

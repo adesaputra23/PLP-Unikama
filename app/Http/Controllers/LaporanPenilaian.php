@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\ZonasiSekolah;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 
 class LaporanPenilaian extends Controller
@@ -92,4 +93,24 @@ class LaporanPenilaian extends Controller
         }
         return $jenis_plp;
     }
+
+    public function LaporanPenilaianMahasiswa()
+    {
+        $user = Auth::user()->get_mahasiswa;
+        $nilai_dpl = ZonasiSekolah::whereHas('JointoMhs', function($query) use ($user){
+            $query->where('jenis_plp', 2)->where('npm', $user->npm);
+        })->get();
+        $nilai_sekolah = ZonasiSekolah::whereHas('JointoMhs', function($query) use ($user){
+            $query->where('npm', $user->npm);
+        })->get();
+        $nilai_akhir_mhs_plp_1 = ZonasiSekolah::whereHas('JointoMhs', function($query) use ($user) {
+            $query->where('jenis_plp', 1)->where('npm', $user->npm);
+        })->get();
+        $nilai_akhir_mhs_plp_2 = ZonasiSekolah::whereHas('JointoMhs', function($query) use ($user){
+            $query->where('jenis_plp', 2)->where('npm', $user->npm);
+        })->get();
+        $list_prodi = User::MAP_PRODI;
+        return view('mahasiswa.laporan_penilaian', compact('user', 'nilai_dpl', 'nilai_sekolah', 'list_prodi', 'nilai_akhir_mhs_plp_1', 'nilai_akhir_mhs_plp_2'));
+    }
+
 }
